@@ -1,0 +1,11 @@
+{
+	"required": true,
+	"package": "io.github.unkn0wncvm1.smartmobs.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+		"ExampleMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
