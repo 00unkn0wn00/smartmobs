@@ -80,4 +80,4 @@ jobs:
         with:
           modrinth-id: hvbQANV1
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          options.files: ./artifacts/smartmobs-1.0.0.jar
+          modrinth-files: ./artifacts/smartmobs-1.0.0.jar
