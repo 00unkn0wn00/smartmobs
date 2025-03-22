@@ -4,6 +4,7 @@
 # against bad commits.
 
 name: build
+
 on: [pull_request, push]
 
 jobs:
@@ -28,3 +29,31 @@ jobs:
         with:
           name: Artifacts
           path: build/libs/
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: build/libs/smartmobs-1.0.0.jar
+          asset_name: smartmobs-1.0.0.jar
+          asset_content_type: application/java-archive
