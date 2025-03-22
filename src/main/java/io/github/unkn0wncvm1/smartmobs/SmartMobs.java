@@ -40,7 +40,7 @@ private void giveMobsControl(LivingEntity mob) {
     if (vehicle instanceof BoatEntity boat) {
         boat.setYaw(mob.getYaw()); // Set boat direction based on mob yaw
         Vec3d mobVelocity = mob.getVelocity();
-        double fixedyforboats = mobVelocity.y + 0.1; // Keep boat on water
+        double fixedyforboats = mobVelocity.y + 0.05; // Keep boat on water
         Vec3d boatVelocity = new Vec3d(mobVelocity.x, fixedyforboats, mobVelocity.z).multiply(2.0); // Increase multiplier for faster boat speed on ice
         boat.setVelocity(boatVelocity);
     } else if (vehicle instanceof MinecartEntity minecart) {
