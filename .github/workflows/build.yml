@@ -24,6 +24,8 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
+      - name: list build artifacts
+        run: ls -alh build/libs
       - name: capture build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -37,6 +39,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: Artifacts
+          path: ./artifacts
+
+      - name: Unzip artifact
+        run: unzip ./artifacts/Artifacts.zip -d ./artifacts
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -48,12 +59,22 @@ jobs:
           draft: false
           prerelease: false
 
-      - name: Upload Release Asset
+      - name: Upload Release Asset (JAR)
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: build/libs/smartmobs-1.0.0.jar
+          asset_path: ./artifacts/smartmobs-1.0.0.jar
           asset_name: smartmobs-1.0.0.jar
+          asset_content_type: application/java-archive
+
+      - name: Upload Release Asset (Sources JAR)
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./artifacts/smartmobs-1.0.0-sources.jar
+          asset_name: smartmobs-1.0.0-sources.jar
           asset_content_type: application/java-archive
