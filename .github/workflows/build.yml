@@ -75,3 +75,8 @@ jobs:
           asset_path: ./artifacts/smartmobs-1.0.0-sources.jar
           asset_name: smartmobs-1.0.0-sources.jar
           asset_content_type: application/java-archive
+      - name: Publish to Modrinth
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: hvbQANV1
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
