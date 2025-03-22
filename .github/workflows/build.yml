@@ -46,7 +46,7 @@ jobs:
           path: ./artifacts
 
       - name: Unzip artifact
-        run: unzip ./artifacts/Artifacts.zip -d ./artifacts
+        run: ls artifacts && unzip ./artifacts/Artifacts.zip -d ./artifacts
 
       - name: Create Release
         id: create_release
