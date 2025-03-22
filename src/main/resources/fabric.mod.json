@@ -3,23 +3,19 @@
 	"id": "smartmobs",
 	"version": "${version}",
 	"name": "SmartMobs",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "A mod that gives mobs brain to control minecarts,boats and horses.",
 	"authors": [
-		"Me!"
+		"unkn0wncvm1 (aka haxz5rxwi)"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/unkn0wncvm1/smartmobs"
 	},
-	"license": "CC0-1.0",
+	"license": "Apache-2.0",
 	"icon": "assets/smartmobs/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
 			"io.github.unkn0wncvm1.smartmobs.SmartMobs"
-		],
-		"client": [
-			"io.github.unkn0wncvm1.smartmobs.SmartMobsClient"
 		]
 	},
 	"mixins": [
