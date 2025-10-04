@@ -14,7 +14,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@v1
+        uses: gradle/actions/wrapper-validation@v3
       - name: Setup JDK
         uses: actions/setup-java@v4
         with:
@@ -37,13 +37,27 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Download artifact
         uses: actions/download-artifact@v4.2.1
         with:
           name: Artifacts
           path: ./artifacts
+
+      - name: Resolve artifact file names
+        id: artifact_paths
+        shell: bash
+        run: |
+          set -euo pipefail
+          JAR=$(ls ./artifacts/*.jar | grep -v sources | head -n 1)
+          echo "jar_path=$JAR" >> "$GITHUB_OUTPUT"
+          echo "jar_name=$(basename "$JAR")" >> "$GITHUB_OUTPUT"
+          SRC=$(ls ./artifacts/*-sources.jar | head -n 1 || true)
+          if [ -n "${SRC:-}" ]; then
+            echo "sources_path=$SRC" >> "$GITHUB_OUTPUT"
+            echo "sources_name=$(basename "$SRC")" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Create Release
         id: create_release
@@ -62,22 +76,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/smartmobs-1.0.0.jar
-          asset_name: smartmobs-1.0.0.jar
+          asset_path: ${{ steps.artifact_paths.outputs.jar_path }}
+          asset_name: ${{ steps.artifact_paths.outputs.jar_name }}
           asset_content_type: application/java-archive
 
       - name: Upload Release Asset (Sources JAR)
+        if: ${{ steps.artifact_paths.outputs.sources_path != '' }}
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./artifacts/smartmobs-1.0.0-sources.jar
-          asset_name: smartmobs-1.0.0-sources.jar
+          asset_path: ${{ steps.artifact_paths.outputs.sources_path }}
+          asset_name: ${{ steps.artifact_paths.outputs.sources_name }}
           asset_content_type: application/java-archive
       - name: Publish to Modrinth
         uses: Kir-Antipov/mc-publish@v3.3
         with:
           modrinth-id: hvbQANV1
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
-          modrinth-files: ./artifacts/smartmobs-1.0.0.jar
+          modrinth-files: ${{ steps.artifact_paths.outputs.jar_path }}
