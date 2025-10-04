@@ -12,22 +12,18 @@
 	},
 	"license": "Apache-2.0",
 	"icon": "assets/smartmobs/icon.png",
-	"environment": "*",
+	"environment": "server",
 	"entrypoints": {
 		"main": [
 			"io.github.unkn0wncvm1.smartmobs.SmartMobs"
 		]
 	},
 	"mixins": [
-		"smartmobs.mixins.json",
-		{
-			"config": "smartmobs.client.mixins.json",
-			"environment": "client"
-		}
+		"smartmobs.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.16.10",
-		"minecraft": "~1.21.5",
+		"minecraft": "~1.21.8",
 		"java": ">=21",
 		"fabric-api": "*"
 	},
